@@ -1,0 +1,36 @@
+plugins:
+  - jest
+  - babel
+
+env:
+  node: true
+  browser: true
+  jest: true
+
+parser: babel-eslint
+
+extends:
+  - 'eslint:recommended'
+  - 'plugin:react/recommended'
+  - 'plugin:jest/recommended'
+
+settings:
+  react:
+    createClass: createReactClass
+    pragma: React
+    fragment: Fragment
+    version: detect
+    flowVersion: '0.53'
+  propWrapperFunctions:
+  - forbidExtraProps
+  - property: freeze
+    object: Object
+  - property: myFavoriteWrapper
+  linkComponents:
+  - Hyperlink
+  - name: Link
+    linkAttribute: to
+
+
+rules:
+  no-console: 0

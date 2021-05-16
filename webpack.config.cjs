@@ -7,6 +7,9 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
   mode,
+  entry: {
+    main: path.join(__dirname, 'src', 'index.jsx'),
+  },
   resolve: {
     extensions: ['.js', '.jsx'],
   },
@@ -27,7 +30,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx|js)?$/,
         exclude: /node_modules/,
         use: 'babel-loader',
       },

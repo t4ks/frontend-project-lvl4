@@ -1,9 +1,11 @@
 import React from 'react';
+import axios from 'axios';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import useAuth from '../hooks/index';
+import routes from '../routes';
 
 const LoginPage = () => {
     const history = useHistory();
@@ -15,10 +17,17 @@ const LoginPage = () => {
             username: '',
             password: '',
         },
-        onSubmit: (values) => {
-            console.log('send values -> ', values);
+        onSubmit: async (values, { setFieldError }) => {
+          try {
+            const response = await axios.post(routes.loginPath(), { username: values.username, password: values.password });
+            localStorage.setItem('userId', response.data.token);
             auth.logIn();
             history.replace(from);
+          }
+          catch (e) {
+            console.log(e);
+            setFieldError('password', 'Invalid password or username');
+          }
         },
     })
 

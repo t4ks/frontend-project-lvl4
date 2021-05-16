@@ -9,14 +9,16 @@ import {
 } from 'react-router-dom';
 import Chat from './Chat.jsx';
 import LoginPage from './Login.jsx';
+import NotFound from './NotFound.jsx';
 import { authContext } from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
 
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-
+  const userId = localStorage.getItem('userId');
+  const initialState = userId !== null;
+  const [loggedIn, setLoggedIn] = useState(initialState);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
@@ -73,9 +75,12 @@ const App = () => {
           <Route path="/login">
             <LoginPage />
           </Route>
-          <PrivateRoute path='/'>
+          <PrivateRoute exact path='/'>
             <Chat />
           </PrivateRoute>
+          <Route path='*'>
+            <NotFound />
+          </Route>
         </Switch>
       </Router>
     </AuthProvider>

@@ -55,6 +55,11 @@ const Chat = ({ fetchChannels, channels }) => {
           {channels.map(createChannel)}
         </Nav>
       </Col>
+      <Col>
+        <div className='bg-light mb-4 p-3 shadow-sm small'>
+          # general
+        </div>
+      </Col>
     </Row>
   );
 }

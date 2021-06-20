@@ -21,6 +21,7 @@ const LoginPage = () => {
           try {
             const response = await axios.post(routes.loginPath(), { username: values.username, password: values.password });
             localStorage.setItem('userId', response.data.token);
+            localStorage.setItem('userName', response.data.username);
             auth.logIn();
             history.replace(from);
           }

@@ -18,3 +18,6 @@ export const fetchChannels = (authToken) => async (dispatch) => {
     dispatch(fetchChannlesFailure());
   }
 }
+
+
+export const addMessage = createAction('ADD_MESSAGE')

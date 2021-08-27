@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Navbar, Button } from 'react-bootstrap';
+import { io } from "socket.io-client";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,13 +11,14 @@ import {
 import Chat from './Chat.jsx';
 import LoginPage from './Login.jsx';
 import NotFound from './NotFound.jsx';
-import { authContext } from '../contexts/index.jsx';
+import { authContext, socketContext } from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
 
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
   const userId = localStorage.getItem('userId');
+  const userName = localStorage.getItem('userName');
   const initialState = userId !== null;
   const [loggedIn, setLoggedIn] = useState(initialState);
   const logIn = () => setLoggedIn(true);
@@ -26,10 +28,21 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <authContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <authContext.Provider value={{ loggedIn, logIn, logOut, userId, userName }}>
       {children}
     </authContext.Provider>
   );
+};
+
+
+// eslint-disable-next-line react/prop-types
+const SocketProvider = ({ children }) => {
+  const socket = io('http://0.0.0.0:5000');
+  return (
+    <socketContext.Provider value={ socket }>
+      {children}
+    </socketContext.Provider>
+  )
 };
 
 
@@ -76,7 +89,9 @@ const App = () => {
             <LoginPage />
           </Route>
           <PrivateRoute exact path='/'>
-            <Chat />
+            <SocketProvider>
+              <Chat />
+            </SocketProvider>
           </PrivateRoute>
           <Route path='*'>
             <NotFound />

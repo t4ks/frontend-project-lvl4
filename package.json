@@ -21,8 +21,10 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.1",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "bootstrap-icons": "^1.5.0",
     "classnames": "^2.3.1",
     "core-js": "^3.10.1",
     "debug": "^4.3.1",
@@ -36,6 +38,7 @@
     "formik": "^2.2.6",
     "html-webpack-plugin": "^5.3.1",
     "http-errors": "^1.8.0",
+    "immer": "^9.0.6",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "pino-pretty": "^4.7.1",

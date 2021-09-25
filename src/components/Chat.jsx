@@ -1,29 +1,19 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import * as _ from 'lodash';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import _ from 'lodash';
 import cn from 'classnames'; 
 import { useFormik } from 'formik';
-import * as actions from '../actions/index.jsx';
+import { fetchChannels, addNewMessage, changeCurrentChannel, addNewChannel, renameChannel, removeChannel } from '../slices/chatSlice.js';
+import { useSelector, useDispatch } from 'react-redux';
 import { Nav, Button, SplitButton, Dropdown, Row, Col, Form } from 'react-bootstrap';
 import useAuth, { useSocket } from '../hooks/index';
-
-
-const mapStateToProp = (state) => {
-  const { channels, messages } = state;
-  return { channels, messages };
-};
-
-
-const actionCreators = {
-    fetchChannels: actions.fetchChannels,
-    addMessage: actions.addMessage,
-};
+import getModal from './modals/index';
+import { withTimeout } from '../utils.js';
 
 
 // eslint-disable-next-line react/prop-types
-const renderChannel = (currentChannelId, setCurrentChannelId) => ({ id, name, removable }) => {
+const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ id, name, removable }) => {
+  const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
   if (removable) {
     return (
       <Nav.Item key={id}>
@@ -31,15 +21,25 @@ const renderChannel = (currentChannelId, setCurrentChannelId) => ({ id, name, re
             className='w-100 px-4 rounded-0 text-start btn'
             title={name}
             variant='light'
+            onClick={pickChannel(id)}
           >
-            <Dropdown.Item eventKey={1}>Remove</Dropdown.Item>
-            <Dropdown.Item eventKey={2}>Re-name</Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => showModal('removing', { id })}
+              eventKey={1}
+            >
+              Remove
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => showModal('renaming', { id, name, removable })}
+              eventKey={2}
+            >
+              Re-name
+            </Dropdown.Item>
           </SplitButton>
       </Nav.Item>
     );
   }
   const defaultClassNames = ['w-100', 'px-4', 'rounded-0', 'text-start', 'btn'];
-  const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
   return (
     <Nav.Item key={id}>
       <Button
@@ -63,43 +63,58 @@ const renderMessage = ({ body, username, id }) => {
 };
 
 
-const Chat = ({ fetchChannels, channels, messages, addMessage }) => {
+const renderModal = ({ modalInfo, hideModal, socket }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+
+  const Component = getModal(modalInfo.type);
+  return <Component modalInfo={modalInfo} onHide={hideModal} socket={socket}/>;
+};
+
+
+const Chat = () => {
+  const channels = useSelector((state) => state.chat.channels);
+  const messages = useSelector((state) => state.chat.messages);
+  const currentChannelId = useSelector((state) => state.chat.currentChannelId);
+  const dispatch = useDispatch();
+
+  const currentChannel = _.find(channels, (channel) => channel.id === currentChannelId);
+  const setCurrentChannelId = (channelId) => dispatch(changeCurrentChannel(channelId));
+
   const socket = useSocket();
   const auth = useAuth();
   const messageInputRef = useRef(null);
   useEffect(() => {
-    fetchChannels(auth.userId);
+    dispatch(fetchChannels(auth.userId));
     socket.on('newMessage', (message) => {
-      addMessage({ message });
+      dispatch(addNewMessage(message));
     });
+    socket.on('newChannel', (channel) => {
+      dispatch(addNewChannel(channel));
+      setCurrentChannelId(channel.id);
+    });
+    socket.on('renameChannel', (channel) => {
+      dispatch(renameChannel(channel));
+    });
+    socket.on('removeChannel', (channel) => {
+      dispatch(removeChannel(channel.id));
+    })
     messageInputRef.current.focus();
     return () => {
       socket.off('newMessage');
+      socket.off('newChannel');
+      socket.off('renameChannel');
+      socket.off('removeChannel');
     }
   }, []);
 
-  const [currentChannelId, setCurrentChannelId] = useState(channels.currentChannelId);
-  const currentChannel = _.find(channels.list, (channel) => channel.id === currentChannelId);
+  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
+  const hideModal = () => setModalInfo({ type: null, item: null });
+  const showModal = (type, item = null) => setModalInfo({ type, item });
 
   const initialValues = {
     message: '',
-  }
-
-  const withTimeout = (onSuccess, onTimeout, timeout) => {
-    let called = false;
-  
-    const timer = setTimeout(() => {
-      if (called) return;
-      called = true;
-      onTimeout();
-    }, timeout);
-  
-    return (...args) => {
-      if (called) return;
-      called = true;
-      clearTimeout(timer);
-      onSuccess.apply(this, args);
-    }
   }
 
   const messageSendTimeout = 1000;  // 1 sec
@@ -113,7 +128,7 @@ const Chat = ({ fetchChannels, channels, messages, addMessage }) => {
         withTimeout(
           (response) => {
             if (response.status !== 'ok') {
-              setFieldError('message', 'the server returned invalid status.');
+              setFieldError('message', 'the server has returned invalid status.');
               console.log(response);
             } else {
               resetForm(initialValues);
@@ -132,10 +147,20 @@ const Chat = ({ fetchChannels, channels, messages, addMessage }) => {
   });
 
   return (
+    <>
     <Row>
       <Col xs={2}>
+        <div className='d-flex justify-content-between mb-2 ps-4 pe-2'>
+          <span>Channels</span>
+          <Button onClick={() => showModal('adding')} className='p-0' variant='text-primary' vertical="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-square" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+          </Button>
+        </div>
         <Nav fill variant="pills" className="flex-column">
-          {channels.list.map(renderChannel(currentChannelId, setCurrentChannelId))}
+          {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
         </Nav>
       </Col>
       <Col>
@@ -176,15 +201,9 @@ const Chat = ({ fetchChannels, channels, messages, addMessage }) => {
         </div>
       </Col>
     </Row>
+    {renderModal({ modalInfo, hideModal, socket })}
+    </>
   );
 }
 
-Chat.propTypes = {
-  channels: PropTypes.object,
-  fetchChannels: PropTypes.func,
-  messages: PropTypes.array,
-  addMessage: PropTypes.func,
-};
-
-
-export default connect(mapStateToProp, actionCreators)(Chat);
+export default Chat

@@ -9,6 +9,7 @@ import { Nav, Button, SplitButton, Dropdown, Row, Col, Form } from 'react-bootst
 import useAuth, { useSocket } from '../hooks/index';
 import getModal from './modals/index';
 import { withTimeout } from '../utils.js';
+import { useTranslation } from 'react-i18next';
 
 
 // eslint-disable-next-line react/prop-types
@@ -74,6 +75,7 @@ const renderModal = ({ modalInfo, hideModal, socket }) => {
 
 
 const Chat = () => {
+  const { t } = useTranslation();
   const channels = useSelector((state) => state.chat.channels);
   const messages = useSelector((state) => state.chat.messages);
   const currentChannelId = useSelector((state) => state.chat.currentChannelId);
@@ -151,7 +153,7 @@ const Chat = () => {
     <Row>
       <Col xs={2}>
         <div className='d-flex justify-content-between mb-2 ps-4 pe-2'>
-          <span>Channels</span>
+          <span>{t('Channels')}</span>
           <Button onClick={() => showModal('adding')} className='p-0' variant='text-primary' vertical="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-square" viewBox="0 0 16 16">
               <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
@@ -183,7 +185,7 @@ const Chat = () => {
                   isInvalid={formik.errors.message || false}
                   autoComplete="message"
                   required={true}
-                  placeholder="message"
+                  placeholder={t('chat.input_message')}
                   ref={messageInputRef}
                 />
                 <Form.Control.Feedback type="invalid">{formik.errors.message}</Form.Control.Feedback>
@@ -193,7 +195,7 @@ const Chat = () => {
                   variant="primary"
                   type="submit"
                   disabled={formik.isSubmitting}
-                  >Submit
+                  >{t('Submit')}
                 </Button>
               </Col>
             </Row>

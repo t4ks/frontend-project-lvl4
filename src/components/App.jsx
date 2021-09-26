@@ -11,6 +11,7 @@ import {
 import Chat from './Chat.jsx';
 import LoginPage from './Login.jsx';
 import NotFound from './NotFound.jsx';
+import SignUp from './SignUp.jsx';
 import { authContext, socketContext } from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
 
@@ -52,7 +53,7 @@ const AuthButton = () => {
   return (
     auth.loggedIn
       ? <Button onClick={auth.logOut}>Log out</Button>
-      : <Button as={Link} to="/login">Log in</Button>
+      : <div><Button as={Link} to="/login">Log in</Button> <Button as={Link} to="/signup">Sign Up</Button></div>
   );
 };
 
@@ -78,7 +79,7 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Navbar bg="light" expand="lg">
-          <Navbar.Brand href="/">Chat</Navbar.Brand>
+          <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <AuthButton />
@@ -87,6 +88,9 @@ const App = () => {
         <Switch>
           <Route path="/login">
             <LoginPage />
+          </Route>
+          <Route path='/signup'>
+            <SignUp />
           </Route>
           <PrivateRoute exact path='/'>
             <SocketProvider>

@@ -1,11 +1,11 @@
 import React from 'react';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import useAuth from '../hooks/index';
 import routes from '../routes';
+import { authorizeUser } from '../utils';
 
 const LoginPage = () => {
     const history = useHistory();
@@ -19,19 +19,19 @@ const LoginPage = () => {
         },
         onSubmit: async (values, { setFieldError }) => {
           try {
-            const response = await axios.post(routes.loginPath(), { username: values.username, password: values.password });
-            localStorage.setItem('userId', response.data.token);
-            localStorage.setItem('userName', response.data.username);
-            auth.logIn();
-            history.replace(from);
+            await authorizeUser({
+              auth, history, from,
+              url: routes.loginPath(),
+              username: values.username,
+              password: values.password,
+            });
           }
           catch (e) {
             console.log(e);
             setFieldError('password', 'Invalid password or username');
           }
         },
-    })
-
+    });
 
     const { from } = location.state || { from: { pathname: "/" } };
   

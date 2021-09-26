@@ -52,8 +52,8 @@ const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchChannels.fulfilled, (state, action) => {
-      state.channels.push(...action.payload.channels);
-      state.messages.push(...action.payload.messages);
+      state.channels = action.payload.channels;
+      state.messages = action.payload.messages;
       state.currentChannelId = action.payload.currentChannelId;
     })
   },

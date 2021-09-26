@@ -7,21 +7,23 @@ import { useHistory, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/index';
 import routes from '../routes';
 import { authorizeUser } from '../utils';
+import { useTranslation } from 'react-i18next';
 
-
-const SignupSchema = yup.object().shape({
-  username: yup.string()
-    .min(3, 'Not less than 3 symbols!')
-    .max(20, 'Not more than 20 symbols')
-    .required(),
-  password: yup.string().min(6, 'The password can not be less than 6 symbols').required(),
-  confirmPassword: yup.string().required(),
-});
 
 const SignUp = () => {
   const history = useHistory();
   const location = useLocation();
   const auth = useAuth();
+  const { t } = useTranslation();
+
+  const SignupSchema = yup.object().shape({
+    username: yup.string()
+      .min(3, t('signUpPage.username.min_len'))
+      .max(20, t('signUpPage.username.max_len'))
+      .required(),
+    password: yup.string().min(6, t('signUpPage.password.min_len')).required(),
+    confirmPassword: yup.string().required(),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +34,7 @@ const SignUp = () => {
     validationSchema: SignupSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       if (values.password !== values.confirmPassword) {
-        setFieldError('confirmPassword', 'The password confirmation field must be the same with the password field');
+        setFieldError('confirmPassword', t('signUpPage.the_pass_field_is_not_the_same_with_confirm_field'));
         return setSubmitting(false);
       }
 
@@ -46,9 +48,9 @@ const SignUp = () => {
       } catch(e) {
         console.log(e);
         if (e.response && e.response.status === 409) {
-          setFieldError('username', 'The user already exist')
+          setFieldError('username', t('signUpPage.user_already_exist'))
         } else {
-          setFieldError('username', 'The registration failed');
+          setFieldError('username', t('signUpPage.registration_failed'));
         }
       }
       setSubmitting(false);
@@ -63,7 +65,7 @@ const SignUp = () => {
         <div className="col-sm-4">
           <Form className="p-3" onSubmit={formik.handleSubmit}>
             <Form.Group>
-              <Form.Label htmlFor="username">Username</Form.Label>
+              <Form.Label htmlFor="username">{t('username')}</Form.Label>
               <Form.Control
                 id="username"
                 name="username"
@@ -72,12 +74,12 @@ const SignUp = () => {
                 isInvalid={formik.errors.username && formik.touched.username || false}
                 autoComplete="username"
                 required={true}
-                placeholder="username"
+                placeholder={t('username')}
               />
               <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label htmlFor="password">Password</Form.Label>
+              <Form.Label htmlFor="password">{t('password')}</Form.Label>
               <Form.Control
                   id="password"
                   name="password"
@@ -86,13 +88,13 @@ const SignUp = () => {
                   isInvalid={formik.errors.password && formik.touched.password || false}
                   autoComplete="password"
                   required={true}
-                  placeholder="password"
+                  placeholder={t('password')}
                   type="password"
                 />
               <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
-              <Form.Label htmlFor="confirmPassword">Confirm Password</Form.Label>
+              <Form.Label htmlFor="confirmPassword">{t('confirmPassword')}</Form.Label>
               <Form.Control
                   id="confirmPassword"
                   name="confirmPassword"
@@ -101,7 +103,7 @@ const SignUp = () => {
                   isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword || false}
                   autoComplete="confirmPassword"
                   required={true}
-                  placeholder="Confirm Password"
+                  placeholder={t('confirmPassword')}
                   type="password"
                 />
               <Form.Control.Feedback type="invalid">{formik.errors.confirmPassword}</Form.Control.Feedback>
@@ -110,7 +112,7 @@ const SignUp = () => {
               variant="primary"
               type="submit"
               disabled={formik.isSubmitting}
-              >{formik.isSubmitting ? 'Submitting…' : 'Submit'}
+              >{formik.isSubmitting ? t('Submitting…') : t('Submit')}
             </Button>
           </Form>
         </div>

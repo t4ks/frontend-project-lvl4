@@ -130,7 +130,7 @@ const Chat = () => {
         withTimeout(
           (response) => {
             if (response.status !== 'ok') {
-              setFieldError('message', 'the server has returned invalid status.');
+              setFieldError('message', t('chat.invalid_status'));
               console.log(response);
             } else {
               resetForm(initialValues);
@@ -139,7 +139,7 @@ const Chat = () => {
             messageInputRef.current.focus();
           },
           () => {
-            setFieldError('message', 'the message has not been sent, please check network connection.');
+            setFieldError('message', t('chat.network_error'));
             setSubmitting(false);
           },
           messageSendTimeout,

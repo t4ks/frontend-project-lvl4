@@ -14,6 +14,7 @@ import NotFound from './NotFound.jsx';
 import SignUp from './SignUp.jsx';
 import { authContext, socketContext } from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
+import { useTranslation } from 'react-i18next';
 
 
 // eslint-disable-next-line react/prop-types
@@ -49,11 +50,11 @@ const SocketProvider = ({ children }) => {
 
 const AuthButton = () => {
   const auth = useContext(authContext);
-
+  const { t } = useTranslation();
   return (
     auth.loggedIn
-      ? <Button onClick={auth.logOut}>Log out</Button>
-      : <div><Button as={Link} to="/login">Log in</Button> <Button as={Link} to="/signup">Sign Up</Button></div>
+      ? <Button onClick={auth.logOut}>{t('Log out')}</Button>
+      : <div><Button as={Link} to="/login">{t('Log in')}</Button> <Button as={Link} to="/signup">{t('Sign Up')}</Button></div>
   );
 };
 

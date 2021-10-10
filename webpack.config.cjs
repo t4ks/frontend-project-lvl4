@@ -12,22 +12,23 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = () => {
 
-  const plugins = [];
+  const exposeEnvKeys = (envKeys) => {
+    return Object.keys(envKeys).reduce((prev, next) => {
+      prev[`process.env.${next}`] = JSON.stringify(envKeys[next]);
+      return prev;
+    }, {})
+  }
+
+  const plugins = [new MiniCssExtractPlugin()];
 
   if (mode !== 'production') {
     const env = dotenv.config().parsed;
-    const envKeys = Object.keys(env).reduce((prev, next) => {
-      prev[`process.env.${next}`] = JSON.stringify(env[next]);
-      return prev;
-    }, {});
+    const envKeys = exposeEnvKeys(env);
     plugins.push(new webpack.DefinePlugin(envKeys))
   } else {
     const buf = Buffer.from(`API_URL=${process.env.API_URL}\nDEBUG=false`)
     const prodEnv = dotenv.parse(buf);
-    const prodEnvKeys = Object.keys(prodEnv).reduce((prev, next) => {
-      prev[`process.env.${next}`] = JSON.stringify(prodEnv[next]);
-      return prev;
-    }, {});
+    const prodEnvKeys = exposeEnvKeys(prodEnv);
     plugins.push(new webpack.DefinePlugin(prodEnvKeys));
   }
 
@@ -50,10 +51,7 @@ module.exports = () => {
       publicPath: '/assets/',
       historyApiFallback: true,
     },
-    plugins: [
-      new MiniCssExtractPlugin(),
-      ...plugins,
-    ],
+    plugins,
     module: {
       rules: [
         {

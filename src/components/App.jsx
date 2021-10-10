@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Navbar, Button } from 'react-bootstrap';
+import { Provider as RollBarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 import { io } from "socket.io-client";
 import {
   BrowserRouter as Router,
@@ -15,6 +16,7 @@ import SignUp from './SignUp.jsx';
 import { authContext, socketContext } from '../contexts/index.jsx';
 import useAuth from '../hooks/index.jsx';
 import { useTranslation } from 'react-i18next';
+import { rollbarConfig, rollbarInstance } from '../rollbar.js';
 
 
 // eslint-disable-next-line react/prop-types
@@ -74,36 +76,44 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
+const checkBoundaryCatch = ({error, info}) => {
+  console.log('ERROR -> ', error)
+  console.log('INFO -> ', info);
+}
 
 const App = () => {
-    return (
-    <AuthProvider>
-      <Router>
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse className="justify-content-end">
-            <AuthButton />
-          </Navbar.Collapse>
-        </Navbar>
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <Route path='/signup'>
-            <SignUp />
-          </Route>
-          <PrivateRoute exact path='/'>
-            <SocketProvider>
-              <Chat />
-            </SocketProvider>
-          </PrivateRoute>
-          <Route path='*'>
-            <NotFound />
-          </Route>
-        </Switch>
-      </Router>
-    </AuthProvider>
+  return (
+    <RollBarProvider config={rollbarConfig} instance={rollbarInstance}>
+      <ErrorBoundary level={LEVEL_WARN} extra={checkBoundaryCatch}>
+        <AuthProvider>
+          <Router>
+            <Navbar bg="light" expand="lg">
+              <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <Navbar.Collapse className="justify-content-end">
+                <AuthButton />
+              </Navbar.Collapse>
+            </Navbar>
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path='/signup'>
+                <SignUp />
+              </Route>
+              <PrivateRoute exact path='/'>
+                <SocketProvider>
+                  <Chat />
+                </SocketProvider>
+              </PrivateRoute>
+              <Route path='*'>
+                <NotFound />
+              </Route>
+            </Switch>
+          </Router>
+        </AuthProvider>
+      </ErrorBoundary>
+    </RollBarProvider>
   )
 }
 

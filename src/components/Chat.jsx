@@ -119,8 +119,6 @@ const Chat = () => {
     message: '',
   }
 
-  console.log('process.env.API_URL -> ', process.env.API_URL)
-
   const messageSendTimeout = 1000;  // 1 sec
   const formik = useFormik({
     initialValues,

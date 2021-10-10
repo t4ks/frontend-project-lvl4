@@ -24,9 +24,10 @@ module.exports = () => {
   if (mode !== 'production') {
     const env = dotenv.config().parsed;
     const envKeys = exposeEnvKeys(env);
-    plugins.push(new webpack.DefinePlugin(envKeys))
+    plugins.push(new webpack.DefinePlugin(envKeys));
   } else {
-    const buf = Buffer.from(`API_URL=${process.env.API_URL}\nDEBUG=false`)
+    const buf = Buffer
+      .from(`API_URL=${process.env.API_URL}\nDEBUG=false\nROLLBAR_ACCESS_TOKEN=${process.env.ROLLBAR_ACCESS_TOKEN}`);
     const prodEnv = dotenv.parse(buf);
     const prodEnvKeys = exposeEnvKeys(prodEnv);
     plugins.push(new webpack.DefinePlugin(prodEnvKeys));

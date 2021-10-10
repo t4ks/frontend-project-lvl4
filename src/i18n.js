@@ -6,7 +6,7 @@ i18n
   .use(initReactI18next) // bind react-i18next to the instance
   .init({
     fallbackLng: 'ru',
-    debug: true,
+    debug: process.env.DEBUG,
 
     interpolation: {
       escapeValue: false, // not needed for react!!

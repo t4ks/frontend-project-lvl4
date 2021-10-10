@@ -76,15 +76,11 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
-const checkBoundaryCatch = ({error, info}) => {
-  console.log('ERROR -> ', error);
-  console.log('INFO -> ', info);
-}
 
 const App = () => {
   return (
     <RollBarProvider config={rollbarConfig} instance={rollbarInstance}>
-      <ErrorBoundary level={LEVEL_WARN} extra={checkBoundaryCatch}>
+      <ErrorBoundary level={LEVEL_WARN}>
         <AuthProvider>
           <Router>
             <Navbar bg="light" expand="lg">

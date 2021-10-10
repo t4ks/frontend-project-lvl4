@@ -18,6 +18,7 @@ $ make install
 ## Run
 
 ```sh
+$ cp .env.sample .env
 $ make start
 # open http://localhost:5000
 ```

@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
 
 // eslint-disable-next-line react/prop-types
 const SocketProvider = ({ children }) => {
-  const socket = io('http://0.0.0.0:5000');
+  const socket = io(process.env.API_URL);
   return (
     <socketContext.Provider value={ socket }>
       {children}

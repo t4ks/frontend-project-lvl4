@@ -21,6 +21,8 @@ module.exports = () => {
       return prev;
     }, {});
     plugins.push(new webpack.DefinePlugin(envKeys))
+  } else {
+    plugins.push(new webpack.DefinePlugin({'process.env.API_URL': process.env.API_URL}))
   }
 
   return {

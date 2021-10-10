@@ -22,7 +22,13 @@ module.exports = () => {
     }, {});
     plugins.push(new webpack.DefinePlugin(envKeys))
   } else {
-    plugins.push(new webpack.DefinePlugin({'process.env.API_URL': process.env.API_URL}))
+    const buf = Buffer.from(`API_URL=${process.env.API_URL}`)
+    const prodEnv = dotenv.parse(buf);
+    const prodEnvKeys = Object.keys(prodEnv).reduce((prev, next) => {
+      prev[`process.env.${next}`] = JSON.stringify(prodEnv[next]);
+      return prev;
+    }, {});
+    plugins.push(new webpack.DefinePlugin(prodEnvKeys));
   }
 
   return {

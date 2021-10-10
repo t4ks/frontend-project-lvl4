@@ -77,7 +77,7 @@ const PrivateRoute = ({ children, path }) => {
 };
 
 const checkBoundaryCatch = ({error, info}) => {
-  console.log('ERROR -> ', error)
+  console.log('ERROR -> ', error);
   console.log('INFO -> ', info);
 }
 

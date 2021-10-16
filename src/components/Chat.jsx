@@ -151,9 +151,9 @@ const Chat = () => {
 
   return (
     <>
-    <Row>
-      <Col xs={2}>
-        <div className='d-flex justify-content-between mb-2 ps-4 pe-2'>
+    <Row className='h-100 flex-md-row bg-white'>
+      <Col xs={4} md={2} className='border-end pt-5 px-0 bg-light'>
+        <div className='d-flex justify-content-between' style={{'paddingLeft': '24px', 'paddingRight': '8px'}}>
           <span>{t('Channels')}</span>
           <Button onClick={() => showModal('adding')} className='p-0' variant='text-primary' vertical="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-plus-square" viewBox="0 0 16 16">

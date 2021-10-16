@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Navbar, Button } from 'react-bootstrap';
+import { Navbar, Button, Container } from 'react-bootstrap';
 import { Provider as RollBarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 import { io } from "socket.io-client";
 import {
@@ -79,37 +79,40 @@ const PrivateRoute = ({ children, path }) => {
 
 const App = () => {
   return (
-    <RollBarProvider config={rollbarConfig} instance={rollbarInstance}>
-      <ErrorBoundary level={LEVEL_WARN}>
-        <AuthProvider>
-          <Router>
-            <Navbar bg="light" expand="lg">
-              <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse className="justify-content-end">
-                <AuthButton />
-              </Navbar.Collapse>
-            </Navbar>
-            <Switch>
-              <Route path="/login">
-                <LoginPage />
-              </Route>
-              <Route path='/signup'>
-                <SignUp />
-              </Route>
-              <PrivateRoute exact path='/'>
-                <SocketProvider>
-                  <Chat />
-                </SocketProvider>
-              </PrivateRoute>
-              <Route path='*'>
-                <NotFound />
-              </Route>
-            </Switch>
-          </Router>
-        </AuthProvider>
-      </ErrorBoundary>
-    </RollBarProvider>
+    <div className='d-flex flex-column h-100'>
+      <RollBarProvider config={rollbarConfig} instance={rollbarInstance}>
+        <ErrorBoundary level={LEVEL_WARN}>
+          <AuthProvider>
+            <Router>
+              <Navbar bg="white" expand="lg" className='shadow-sm'>
+                <Container>
+                  <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+                    <AuthButton />
+                </Container>
+              </Navbar>
+              <Switch>
+                <Route path="/login">
+                  <LoginPage />
+                </Route>
+                <Route path='/signup'>
+                  <SignUp />
+                </Route>
+                <PrivateRoute exact path='/'>
+                  <SocketProvider>
+                    <Container className='h-100 my-4 overflow-hidden rounded shadow'>
+                      <Chat />
+                    </Container>
+                  </SocketProvider>
+                </PrivateRoute>
+                <Route path='*'>
+                  <NotFound />
+                </Route>
+              </Switch>
+            </Router>
+          </AuthProvider>
+        </ErrorBoundary>
+      </RollBarProvider>
+    </div>
   )
 }
 

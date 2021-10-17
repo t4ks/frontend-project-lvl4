@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { useFormik } from 'formik';
 import { fetchChannels, addNewMessage, changeCurrentChannel, addNewChannel, renameChannel, removeChannel } from '../slices/chatSlice.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { Nav, Button, SplitButton, Dropdown, Row, Col, Form } from 'react-bootstrap';
+import { Nav, Button, Dropdown, Row, Col, Form, ButtonGroup, DropdownButton } from 'react-bootstrap';
 import useAuth, { useSocket } from '../hooks/index';
 import getModal from './modals/index';
 import { withTimeout } from '../utils.js';
@@ -18,25 +18,33 @@ const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ i
   if (removable) {
     return (
       <Nav.Item as='li' key={id}>
-          <SplitButton
-            className='d-flex'
-            title={`# ${name}`}
-            variant={currentChannelId !== id ? 'light' : 'secondary'}
-            onClick={pickChannel(id)}
-          >
-            <Dropdown.Item
-              onClick={() => showModal('removing', { id })}
-              eventKey={1}
+          <ButtonGroup className='d-flex dropdown'>
+            <Button
+              className='d-flex text-left'
+              variant={currentChannelId !== id ? 'light' : 'secondary'}
+              onClick={pickChannel(id)}
+            >{`# ${name}`}
+            </Button>
+            <DropdownButton
+              variant={currentChannelId !== id ? 'light' : 'secondary'}
+              as={ButtonGroup}
+              title=""
+              id="bg-nested-dropdown"
             >
-              Remove
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => showModal('renaming', { id, name, removable })}
-              eventKey={2}
-            >
-              Re-name
-            </Dropdown.Item>
-          </SplitButton>
+              <Dropdown.Item
+                onClick={() => showModal('removing', { id })}
+                eventKey={1}
+              >
+                Remove
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => showModal('renaming', { id, name, removable })}
+                eventKey={2}
+              >
+                Re-name
+              </Dropdown.Item>
+            </DropdownButton>
+          </ButtonGroup>
       </Nav.Item>
     );
   }
@@ -165,41 +173,47 @@ const Chat = () => {
           {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
         </Nav>
       </Col>
-      <Col>
-        <div className='bg-light mb-4 p-3 shadow-sm small'>
-          # {currentChannel && currentChannel.name}
-        </div>
-        <div id='messages-box' className='chat-messages overflow-auto px-5'>
-          {messages.filter((message) => message.channelId === currentChannelId).map(renderMessage)}
-        </div>
-        <div className='mt-auto px-5 py-3'>
-          <Form className='py-1 border rounded-2' onSubmit={formik.handleSubmit}>
-            <Row>
-              <Col xs={10}>
-                <Form.Control
-                  name='message'
-                  className='border-0 p-0 ps-2'
-                  data-testid='new-message'
-                  onChange={formik.handleChange}
-                  value={formik.values.message}
-                  isInvalid={formik.errors.message || false}
-                  autoComplete="message"
-                  required={true}
-                  placeholder={t('chat.input_message')}
-                  ref={messageInputRef}
-                />
-                <Form.Control.Feedback type="invalid">{formik.errors.message}</Form.Control.Feedback>
-              </Col>
-              <Col>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={formik.isSubmitting}
-                  >{t('Submit')}
-                </Button>
-              </Col>
-            </Row>
-          </Form>
+      <Col className='p-0 h-100'>
+        <div className='d-flex flex-column h-100'>
+          <div className='bg-light mb-4 p-3 shadow-sm'>
+            <p className='m-0'>
+              <b>
+                # {currentChannel && currentChannel.name}
+              </b>
+            </p>
+          </div>
+          <div id='messages-box' className='chat-messages overflow-auto px-5'>
+            {messages.filter((message) => message.channelId === currentChannelId).map(renderMessage)}
+          </div>
+          <div className='mt-auto px-5 py-3'>
+            <Form className='py-1 border rounded-2' onSubmit={formik.handleSubmit}>
+              <Row>
+                <Col xs={10}>
+                  <Form.Control
+                    name='message'
+                    className='border-0 p-0 ps-2'
+                    data-testid='new-message'
+                    onChange={formik.handleChange}
+                    value={formik.values.message}
+                    isInvalid={formik.errors.message || false}
+                    autoComplete="message"
+                    required={true}
+                    placeholder={t('chat.input_message')}
+                    ref={messageInputRef}
+                  />
+                  <Form.Control.Feedback type="invalid">{formik.errors.message}</Form.Control.Feedback>
+                </Col>
+                <Col>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={formik.isSubmitting}
+                    >{t('Submit')}
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </div>
         </div>
       </Col>
     </Row>

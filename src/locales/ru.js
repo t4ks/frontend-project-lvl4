@@ -30,5 +30,6 @@ export default {
     'Log out': 'Выйти',
     'Log in': 'Войти',
     'Sign Up': 'Зарегистрироваться',
+    channelAddModal: 'Добавить новый канал'
   },
 }

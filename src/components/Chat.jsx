@@ -169,9 +169,11 @@ const Chat = () => {
             </svg>
           </Button>
         </div>
-        <Nav fill as='ul' variant="pills" className="flex-column">
-          {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
-        </Nav>
+        <div id='channes-list' className='overflow-auto'>
+          <Nav fill as='ul' variant="pills" className="flex-column">
+            {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
+          </Nav>
+        </div>
       </Col>
       <Col className='p-0 h-100'>
         <div className='d-flex flex-column h-100'>

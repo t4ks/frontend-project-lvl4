@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
 import { withTimeout } from '../../utils.js';
+import { useTranslation } from 'react-i18next';
 
 
 const messageSendTimeout = 1000;
 
 const Add = ({ onHide, socket }) => {
+  const { t } = useTranslation();
+
   const formik = useFormik({ 
     initialValues: { body: '' },
     onSubmit: (values, { setFieldError, setSubmitting }) => {
@@ -17,7 +20,7 @@ const Add = ({ onHide, socket }) => {
         withTimeout(
           (response) => {
             if (response.status !== 'ok') {
-              setFieldError('body', 'the server has returned invalid status.');
+              setFieldError('body', t('invalid_status'));
               console.log(response);
             } else {
               onHide();
@@ -25,7 +28,7 @@ const Add = ({ onHide, socket }) => {
             setSubmitting(false);
           },
           () => {
-            setFieldError('body', 'the channel has not been created, please check a network connection.');
+            setFieldError('body', t('network_error'));
             setSubmitting(false);
           },
           messageSendTimeout,
@@ -42,7 +45,7 @@ const Add = ({ onHide, socket }) => {
   return (
     <Modal show={true}>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Add</Modal.Title>
+        <Modal.Title>{t('channelAddModal')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -54,11 +57,11 @@ const Add = ({ onHide, socket }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid="input-body"
-              name="body"
+              data-testid='input-body'
+              name='body'
             />
           </FormGroup>
-          <input type="submit" className="btn btn-primary" value="submit" />
+          <input type='submit' className='btn btn-primary' value={t('Submit')} />
         </form>
       </Modal.Body>
     </Modal>

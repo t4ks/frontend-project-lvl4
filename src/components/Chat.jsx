@@ -17,11 +17,11 @@ const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ i
   const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
   if (removable) {
     return (
-      <Nav.Item key={id}>
+      <Nav.Item as='li' key={id}>
           <SplitButton
-            className='w-100 px-4 rounded-0 text-start btn'
-            title={name}
-            variant='light'
+            className='d-flex'
+            title={`# ${name}`}
+            variant={currentChannelId !== id ? 'light' : 'secondary'}
             onClick={pickChannel(id)}
           >
             <Dropdown.Item
@@ -40,15 +40,14 @@ const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ i
       </Nav.Item>
     );
   }
-  const defaultClassNames = ['w-100', 'px-4', 'rounded-0', 'text-start', 'btn'];
+  const defaultClassNames = ['w-100', 'rounded-0', 'text-left'];
   return (
-    <Nav.Item key={id}>
+    <Nav.Item as='li' key={id}>
       <Button
-        className={cn(defaultClassNames, {'btn-secondary': currentChannelId === id})}
-        variant='light'
-        title={name}
+        className={cn(defaultClassNames)}
+        variant={currentChannelId !== id ? 'light' : 'secondary'}
         onClick={pickChannel(id)}
-      >{name}
+      >{`# ${name}`}
       </Button>
     </Nav.Item>
   )
@@ -162,7 +161,7 @@ const Chat = () => {
             </svg>
           </Button>
         </div>
-        <Nav fill variant="pills" className="flex-column">
+        <Nav fill as='ul' variant="pills" className="flex-column">
           {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
         </Nav>
       </Col>

@@ -155,7 +155,6 @@ const Chat = () => {
   });
  
 
-
   return (
     <>
     <Row className='h-100 flex-md-row bg-white'>

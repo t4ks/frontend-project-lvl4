@@ -57,7 +57,7 @@ const Add = ({ onHide, socket }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid='input-body'
+              data-testid='add-channel'
               name='body'
             />
           </FormGroup>

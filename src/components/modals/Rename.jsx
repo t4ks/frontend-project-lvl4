@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
 import { withTimeout } from '../../utils.js';
+import { useTranslation } from 'react-i18next';
 
 
 const messageSendTimeout = 1000;
 
 const Rename = ({ onHide, socket, modalInfo }) => {
+  const { t } = useTranslation();
   const formik = useFormik({ 
     initialValues: { body: '' },
     onSubmit: (values, { setFieldError, setSubmitting }) => {
@@ -17,7 +19,7 @@ const Rename = ({ onHide, socket, modalInfo }) => {
         withTimeout(
           (response) => {
             if (response.status !== 'ok') {
-              setFieldError('body', 'the server has returned invalid status.');
+              setFieldError('body', t('invalid_status'));
               console.log(response);
             } else {
               onHide();
@@ -25,7 +27,7 @@ const Rename = ({ onHide, socket, modalInfo }) => {
             setSubmitting(false);
           },
           () => {
-            setFieldError('body', 'the channel has not been renamed, please check a network connection.');
+            setFieldError('body', t('network_error'));
             setSubmitting(false);
           },
           messageSendTimeout,
@@ -42,7 +44,7 @@ const Rename = ({ onHide, socket, modalInfo }) => {
   return (
     <Modal show={true}>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Rename</Modal.Title>
+        <Modal.Title>{t('Rename Channel')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -54,11 +56,11 @@ const Rename = ({ onHide, socket, modalInfo }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid="input-body"
-              name="body"
+              data-testid='rename-channel'
+              name='body'
             />
           </FormGroup>
-          <input type="submit" className="btn btn-primary" value="submit" />
+          <input type="submit" className="btn btn-primary" value={t('Submit')} />
         </form>
       </Modal.Body>
     </Modal>

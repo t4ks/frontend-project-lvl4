@@ -32,6 +32,12 @@ export default {
     'Log in': 'Войти',
     'Sign Up': 'Зарегистрироваться',
     'Sign Up Form': 'Регистрация',
-    channelAddModal: 'Добавить новый канал'
+    channelAddModal: 'Добавить новый канал',
+    'Remove Channel': 'Удалить выбранный Канал',
+    'Rename Channel': 'Переименовать Канал',
+    'Are you sure wants to delete this channel?': 'Вы уверены, что хотите удалить Канал?',
+    Close: 'Закрыть',
+    Remove: 'Удалить',
+    Rename: 'Переименовать',
   },
 }

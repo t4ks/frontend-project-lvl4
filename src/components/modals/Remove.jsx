@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import { withTimeout } from '../../utils.js';
+import { useTranslation } from 'react-i18next';
 
 
 const messageSendTimeout = 1000;
@@ -16,7 +17,7 @@ const renderErrorFooter = (message) => {
 }
 
 const Remove = ({ onHide, socket, modalInfo }) => {
-
+  const { t } = useTranslation();
   const [submit, setSubmit] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +30,7 @@ const Remove = ({ onHide, socket, modalInfo }) => {
         (response) => {
           if (response.status !== 'ok') {
             console.log(response);
-            setErrorMessage('The response is not success.');
+            setErrorMessage(t('invalid_status'));
           } else {
             return onHide();
           }
@@ -37,7 +38,7 @@ const Remove = ({ onHide, socket, modalInfo }) => {
         },
         () => {
           setSubmit(false);
-          setErrorMessage('Timeout error. Check network connection');
+          setErrorMessage(t('network_error'));
         },
         messageSendTimeout,
       ),
@@ -46,18 +47,18 @@ const Remove = ({ onHide, socket, modalInfo }) => {
   return (
     <Modal show={true}>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Remove Channel</Modal.Title>
+        <Modal.Title>{t('Remove Channel')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        Are you sure wants to delete this channel?
+        {t('Are you sure wants to delete this channel?')}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide} disabled={submit}>
-          Close
+          {t('Close')}
         </Button>
         <Button type="submit" className="btn btn-primary" disabled={submit} onClick={handleClick}>
-          Save Changes
+          {t('Submit')}
         </Button>
       </Modal.Footer>
       {errorMessage && renderErrorFooter(errorMessage)}

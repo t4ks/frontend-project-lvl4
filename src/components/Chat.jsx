@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 
 // eslint-disable-next-line react/prop-types
-const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ id, name, removable }) => {
+const renderChannel = (currentChannelId, setCurrentChannelId, showModal, t) => ({ id, name, removable }) => {
   const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
   if (removable) {
     return (
@@ -35,13 +35,13 @@ const renderChannel = (currentChannelId, setCurrentChannelId, showModal) => ({ i
                 onClick={() => showModal('removing', { id })}
                 eventKey={1}
               >
-                Remove
+                {t('Remove')}
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => showModal('renaming', { id, name, removable })}
                 eventKey={2}
               >
-                Re-name
+                {t('Rename')}
               </Dropdown.Item>
             </DropdownButton>
           </ButtonGroup>
@@ -169,9 +169,9 @@ const Chat = () => {
             </svg>
           </Button>
         </div>
-        <div id='channes-list' className='overflow-auto'>
+        <div id='channes-list'>
           <Nav fill as='ul' variant="pills" className="flex-column">
-            {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal))}
+            {channels.map(renderChannel(currentChannelId, setCurrentChannelId, showModal, t))}
           </Nav>
         </div>
       </Col>

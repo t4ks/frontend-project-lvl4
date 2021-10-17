@@ -7,29 +7,31 @@ export default {
       network_error: 'Сетевая ошибка. Проверьте подключение к интернету.'
     },
     loginPage: {
-      invalid_pass_or_user: 'Не правильный логин или пароль',
+      invalid_pass_or_user: 'Неверные имя пользователя или пароль',
     },
     signUpPage: {
-      the_pass_field_is_not_the_same_with_confirm_field: 'Значение в поле Подтвердить пароль не совпадает со значением в поле Пароль.',
+      the_pass_field_is_not_the_same_with_confirm_field: 'Пароли должны совпадать',
       password: {
-        min_len: 'Пароль должен быть не менее 6 символов',
+        min_len: 'Не менее 6 символов',
       },
       username: {
-        min_len: 'Имя пользователя должно быть не менее 3 символов',
-        max_len: 'Имя пользователя должно быть не более 20 символов',
+        min_len: 'От 3 до 20 символов',
+        max_len: 'От 3 до 20 символов',
+        field_name: 'Имя пользователя',
       },
       user_already_exist: 'Пользователь уже сущетвует',
       registration_failed: 'Ошибка регистрации, попробуйте позже.',
     },
     'Submitting…': 'Отправка...',
     Submit: 'Отправить',
-    username: 'Пользователь',
+    username: 'Ваш ник',
     password: 'Пароль',
-    confirmPassword: 'Подтверждение пароля',
+    confirmPassword: 'Подтвердите пароль',
     'Page not found': 'Страница не найдена',
     'Log out': 'Выйти',
     'Log in': 'Войти',
     'Sign Up': 'Зарегистрироваться',
+    'Sign Up Form': 'Регистрация',
     channelAddModal: 'Добавить новый канал'
   },
 }

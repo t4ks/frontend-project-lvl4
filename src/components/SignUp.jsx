@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Row, Container } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -60,12 +60,15 @@ const SignUp = () => {
   const { from } = location.state || { from: { pathname: "/" } };
 
   return (
-    <div className="container-fluid">
-      <div className="row justify-content-center pt-5">
+    <Container>
+      <Row className="justify-content-center pt-5">
+          <h2>{t('Sign Up Form')}</h2>
+      </Row>
+      <Row className="justify-content-center pt-5">
         <div className="col-sm-4">
           <Form className="p-3" onSubmit={formik.handleSubmit}>
             <Form.Group>
-              <Form.Label htmlFor="username">{t('username')}</Form.Label>
+              <Form.Label htmlFor="username">{t('signUpPage.username.field_name')}</Form.Label>
               <Form.Control
                 id="username"
                 name="username"
@@ -116,8 +119,8 @@ const SignUp = () => {
             </Button>
           </Form>
         </div>
-      </div>
-    </div>
+      </Row>
+      </Container>
   );
 }
 

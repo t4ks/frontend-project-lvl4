@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Container, Row } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import useAuth from '../hooks/index';
@@ -39,8 +39,12 @@ const LoginPage = () => {
     const { from } = location.state || { from: { pathname: "/" } };
   
     return (
-      <div className="container-fluid">
-        <div className="row justify-content-center pt-5">
+      // <div className="container-fluid">
+      <Container>
+        <Row className="justify-content-center pt-5">
+          <h2>{t('Log in')}</h2>
+        </Row>
+        <Row className="justify-content-center pt-5">
           <div className="col-sm-4">
             <Form className="p-3" onSubmit={formik.handleSubmit}>
               <Form.Group>
@@ -79,8 +83,8 @@ const LoginPage = () => {
               </Button>
             </Form>
           </div>
-        </div>
-      </div>
+        </Row>
+      </Container>
     );
   }
 

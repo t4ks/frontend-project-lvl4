@@ -31,7 +31,7 @@ export default {
     'Page not found': 'Страница не найдена',
     'Log out': 'Выйти',
     'Log in': 'Войти',
-    'Sign Up': 'Зарегистрироваться',
+    'Sign Up': 'Регистрация',
     'Sign Up Form': 'Регистрация',
     channelAddModal: 'Добавить новый канал',
     'Remove Channel': 'Удалить выбранный Канал',

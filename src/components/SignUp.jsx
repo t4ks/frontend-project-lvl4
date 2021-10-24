@@ -22,7 +22,7 @@ const SignUp = () => {
       .max(20, t('signUpPage.username.max_len'))
       .required(),
     password: yup.string().min(6, t('signUpPage.password.min_len')).required(),
-    confirmPassword: yup.string().required(),
+    confirmPassword: yup.string().oneOf([yup.ref('password')], t('signUpPage.the_pass_field_is_not_the_same_with_confirm_field')).required(),
   });
 
   const formik = useFormik({
@@ -33,11 +33,6 @@ const SignUp = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
-      if (values.password !== values.confirmPassword) {
-        setFieldError('confirmPassword', t('signUpPage.the_pass_field_is_not_the_same_with_confirm_field'));
-        return setSubmitting(false);
-      }
-
       try {
         await authorizeUser({
           auth, history, from,

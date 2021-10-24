@@ -115,7 +115,7 @@ const SignUp = () => {
               variant="primary"
               type="submit"
               disabled={formik.isSubmitting}
-              >{formik.isSubmitting ? t('Submitting…') : t('Submit')}
+              >{formik.isSubmitting ? t('Submitting…') : t('signUpPage.Submit')}
             </Button>
           </Form>
         </div>

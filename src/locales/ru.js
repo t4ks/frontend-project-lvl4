@@ -22,6 +22,7 @@ export default {
       },
       user_already_exist: 'Пользователь уже сущетвует',
       registration_failed: 'Ошибка регистрации, попробуйте позже.',
+      Submit: 'Зарегистрироваться',
     },
     'Submitting…': 'Отправка...',
     Submit: 'Отправить',

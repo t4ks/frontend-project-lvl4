@@ -39,7 +39,6 @@ const LoginPage = () => {
     const { from } = location.state || { from: { pathname: "/" } };
   
     return (
-      // <div className="container-fluid">
       <Container>
         <Row className="justify-content-center pt-5">
           <h2>{t('Log in')}</h2>
@@ -79,7 +78,7 @@ const LoginPage = () => {
                 variant="primary"
                 type="submit"
                 disabled={formik.isSubmitting}
-                >{formik.isSubmitting ? t('Submitting…') : t('Submit')}
+                >{formik.isSubmitting ? t('Submitting…') : t('loginPage.LogIn')}
               </Button>
             </Form>
           </div>

@@ -8,6 +8,7 @@ export default {
     },
     loginPage: {
       invalid_pass_or_user: 'Неверные имя пользователя или пароль',
+      LogIn: 'Войти',
     },
     signUpPage: {
       the_pass_field_is_not_the_same_with_confirm_field: 'Пароли должны совпадать',

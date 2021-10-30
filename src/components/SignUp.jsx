@@ -115,7 +115,7 @@ const SignUp = () => {
           </Form>
         </div>
       </Row>
-      </Container>
+    </Container>
   );
 }
 

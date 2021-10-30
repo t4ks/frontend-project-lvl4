@@ -94,8 +94,16 @@ const Chat = () => {
   const socket = useSocket();
   const auth = useAuth();
   const messageInputRef = useRef(null);
-  useEffect(() => {
-    dispatch(fetchChannels(auth.userId));
+
+  useEffect(async () => {
+    messageInputRef.current.focus();
+    try {
+      await dispatch(fetchChannels(auth.userId)).unwrap();
+    } catch (err) {
+      if ((err.statusCode) && (err.statusCode === 401)) {
+        auth.logOut();
+      }
+    }
     socket.on('newMessage', (message) => {
       dispatch(addNewMessage(message));
     });
@@ -109,7 +117,6 @@ const Chat = () => {
     socket.on('removeChannel', (channel) => {
       dispatch(removeChannel(channel.id));
     })
-    messageInputRef.current.focus();
     return () => {
       socket.off('newMessage');
       socket.off('newChannel');

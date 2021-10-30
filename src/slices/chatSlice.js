@@ -8,14 +8,20 @@ const initialState = {
   channels: [],
   currentChannelId: null,
   messages: [],
-  state: 'idle',
 }
 
 
-export const fetchChannels = createAsyncThunk('chat/fetchChannels', async (authToken) => {
-  const response = await axios.get(routers.dataPath(), { headers: { Authorization: `Bearer ${authToken}` } });
-  return response.data
-});
+export const fetchChannels = createAsyncThunk(
+  'chat/fetchChannels',
+  async (authToken, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(routers.dataPath(), { headers: { Authorization: `Bearer ${authToken}` } });
+      return response.data
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 
 const chatSlice = createSlice({

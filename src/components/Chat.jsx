@@ -94,6 +94,7 @@ const Chat = () => {
   const socket = useSocket();
   const auth = useAuth();
   const messageInputRef = useRef(null);
+  const defaultChannelId = 1;
 
   useEffect(async () => {
     messageInputRef.current.focus();
@@ -102,6 +103,8 @@ const Chat = () => {
     } catch (err) {
       if ((err.statusCode) && (err.statusCode === 401)) {
         auth.logOut();
+      } else {
+        console.error(err);
       }
     }
     socket.on('newMessage', (message) => {
@@ -116,6 +119,7 @@ const Chat = () => {
     });
     socket.on('removeChannel', (channel) => {
       dispatch(removeChannel(channel.id));
+      setCurrentChannelId(defaultChannelId);
     })
     return () => {
       socket.off('newMessage');

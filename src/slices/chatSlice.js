@@ -1,3 +1,7 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable functional/immutable-data */
+/* eslint-disable functional/no-conditional-statement */
+/* eslint-disable functional/no-expression-statement */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import produce from 'immer';

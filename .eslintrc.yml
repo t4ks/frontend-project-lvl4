@@ -39,4 +39,6 @@ settings:
 
 rules:
   no-console: 0
-  import/extensions: [error, always, {ignorePackages: true} ]
+  import/extensions: [ error, always, { ignorePackages: true } ]
+  functional/no-try-statement: [ error, { allowCatch: true, allowFinally: false } ]
+  functional/functional-parameters: [ error, { enforceParameterCount: false } ]

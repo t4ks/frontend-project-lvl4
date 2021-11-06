@@ -11,47 +11,46 @@ import { useTranslation } from 'react-i18next';
 import {
   fetchChannels, addNewMessage, changeCurrentChannel, addNewChannel, renameChannel, removeChannel,
 } from '../slices/chatSlice.js';
-import useAuth, { useSocket } from '../hooks/index';
-import getModal from './modals/index';
+import useAuth, { useSocket } from '../hooks/index.jsx';
+import getModal from './modals/index.jsx';
 import { withTimeout } from '../utils.js';
 
-// eslint-disable-next-line react/prop-types
-const renderChannel = (currentChannelId, setCurrentChannelId, showModal, t) => ({ id, name, removable }) => {
-  const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
-  if (removable) {
-    return (
-      <Nav.Item as="li" key={id}>
-        <ButtonGroup className="d-flex dropdown">
-          <Button
-            className="d-flex text-left"
-            variant={currentChannelId !== id ? 'light' : 'secondary'}
-            onClick={pickChannel(id)}
-          >
-            {`# ${name}`}
-          </Button>
-          <DropdownButton
-            variant={currentChannelId !== id ? 'light' : 'secondary'}
-            as={ButtonGroup}
-            title=""
-            id="bg-nested-dropdown"
-          >
-            <Dropdown.Item
-              onClick={() => showModal('removing', { id })}
-              eventKey={1}
-            >
-              {t('Remove')}
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => showModal('renaming', { id, name, removable })}
-              eventKey={2}
-            >
-              {t('Rename')}
-            </Dropdown.Item>
-          </DropdownButton>
-        </ButtonGroup>
-      </Nav.Item>
-    );
-  }
+const renderRemovableChannel = (
+  currentChannelId, showModal, t, id, name, pickChannel,
+) => (
+  <Nav.Item as="li" key={id}>
+    <ButtonGroup className="d-flex dropdown">
+      <Button
+        className="d-flex text-left"
+        variant={currentChannelId !== id ? 'light' : 'secondary'}
+        onClick={pickChannel(id)}
+      >
+        {`# ${name}`}
+      </Button>
+      <DropdownButton
+        variant={currentChannelId !== id ? 'light' : 'secondary'}
+        as={ButtonGroup}
+        title=""
+        id="bg-nested-dropdown"
+      >
+        <Dropdown.Item
+          onClick={() => showModal('removing', { id })}
+          eventKey={1}
+        >
+          {t('Remove')}
+        </Dropdown.Item>
+        <Dropdown.Item
+          onClick={() => showModal('renaming', { id, name })}
+          eventKey={2}
+        >
+          {t('Rename')}
+        </Dropdown.Item>
+      </DropdownButton>
+    </ButtonGroup>
+  </Nav.Item>
+);
+
+const renderDefaultChannel = (currentChannelId, id, pickChannel, name) => {
   const defaultClassNames = ['w-100', 'rounded-0', 'text-left'];
   return (
     <Nav.Item as="li" key={id}>
@@ -64,6 +63,20 @@ const renderChannel = (currentChannelId, setCurrentChannelId, showModal, t) => (
       </Button>
     </Nav.Item>
   );
+};
+
+// eslint-disable-next-line react/prop-types
+const renderChannel = (
+  currentChannelId,
+  setCurrentChannelId,
+  showModal,
+  t,
+) => ({ id, name, removable }) => {
+  const pickChannel = (channelId) => () => setCurrentChannelId(channelId);
+
+  return removable
+    ? renderRemovableChannel(currentChannelId, showModal, t, id, name, pickChannel)
+    : renderDefaultChannel(currentChannelId, id, pickChannel, name);
 };
 
 const renderMessage = ({ body, username, id }) => (

@@ -87,14 +87,16 @@ const renderMessage = ({ body, username, id }) => (
   </div>
 );
 
-const renderModal = ({ modalInfo, hideModal, socket }) => {
-  if (!modalInfo.type) {
-    return null;
-  }
-
+const renderModalComponent = ({ modalInfo, hideModal, socket }) => {
   const Component = getModal(modalInfo.type);
   return <Component modalInfo={modalInfo} onHide={hideModal} socket={socket} />;
 };
+
+const renderModal = ({ modalInfo, hideModal, socket }) => (
+  !modalInfo.type
+    ? null
+    : renderModalComponent({ modalInfo, hideModal, socket })
+);
 
 const Chat = () => {
   const { t } = useTranslation();

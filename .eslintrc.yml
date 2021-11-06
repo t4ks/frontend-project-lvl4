@@ -1,6 +1,8 @@
 plugins:
   - jest
   - babel
+  - react
+  - functional
 
 env:
   node: true
@@ -10,9 +12,12 @@ env:
 parser: babel-eslint
 
 extends:
-  - 'eslint:recommended'
-  - 'plugin:react/recommended'
-  - 'plugin:jest/recommended'
+  - airbnb
+  - "plugin:jest/recommended"
+  - "plugin:functional/external-recommended"
+  - "plugin:functional/recommended"
+  - "plugin:react/recommended"
+  - "plugin:react-hooks/recommended"
 
 settings:
   react:
@@ -34,3 +39,4 @@ settings:
 
 rules:
   no-console: 0
+  import/extensions: [error, always, {ignorePackages: true} ]

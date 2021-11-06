@@ -2,16 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
-import { withTimeout } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
-
+import { withTimeout } from '../../utils';
 
 const messageSendTimeout = 1000;
 
 const Add = ({ onHide, socket }) => {
   const { t } = useTranslation();
 
-  const formik = useFormik({ 
+  const formik = useFormik({
     initialValues: { body: '' },
     onSubmit: (values, { setFieldError, setSubmitting }) => {
       socket.emit(
@@ -43,7 +42,7 @@ const Add = ({ onHide, socket }) => {
   }, [null]);
 
   return (
-    <Modal show={true}>
+    <Modal show>
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>{t('channelAddModal')}</Modal.Title>
       </Modal.Header>
@@ -57,11 +56,11 @@ const Add = ({ onHide, socket }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid='add-channel'
-              name='body'
+              data-testid="add-channel"
+              name="body"
             />
           </FormGroup>
-          <input type='submit' className='btn btn-primary' value={t('Submit')} />
+          <input type="submit" className="btn btn-primary" value={t('Submit')} />
         </form>
       </Modal.Body>
     </Modal>
@@ -71,6 +70,6 @@ const Add = ({ onHide, socket }) => {
 Add.propTypes = {
   onHide: PropTypes.func,
   socket: PropTypes.object,
-}
+};
 
 export default Add;

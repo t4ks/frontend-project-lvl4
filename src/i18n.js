@@ -26,8 +26,7 @@ i18n
     */
     resources: {
       ru,
-    }
+    },
   });
-
 
 export default i18n;

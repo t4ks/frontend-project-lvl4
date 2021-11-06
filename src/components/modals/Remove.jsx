@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
-import { withTimeout } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
-
+import { withTimeout } from '../../utils.js';
 
 const messageSendTimeout = 1000;
 
-
-const renderErrorFooter = (message) => {
-  return  (
-    <Modal.Footer>
-      {message}
-    </Modal.Footer>
-  )
-}
+const renderErrorFooter = (message) => (
+  <Modal.Footer>
+    {message}
+  </Modal.Footer>
+);
 
 const Remove = ({ onHide, socket, modalInfo }) => {
   const { t } = useTranslation();
@@ -43,9 +39,9 @@ const Remove = ({ onHide, socket, modalInfo }) => {
         messageSendTimeout,
       ),
     );
-  }
+  };
   return (
-    <Modal show={true}>
+    <Modal show>
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>{t('Remove Channel')}</Modal.Title>
       </Modal.Header>
@@ -70,6 +66,6 @@ Remove.propTypes = {
   onHide: PropTypes.func,
   socket: PropTypes.object,
   modalInfo: PropTypes.object,
-}
+};
 
 export default Remove;

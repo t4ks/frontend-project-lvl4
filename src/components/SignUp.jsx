@@ -1,14 +1,15 @@
 import React from 'react';
-import { Form, Button, Row, Container } from 'react-bootstrap';
+import {
+  Form, Button, Row, Container,
+} from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useHistory, useLocation } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/index';
 import routes from '../routes';
 import { authorizeUser } from '../utils';
-import { useTranslation } from 'react-i18next';
-
 
 const SignUp = () => {
   const history = useHistory();
@@ -35,15 +36,17 @@ const SignUp = () => {
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
         await authorizeUser({
-          auth, history, from,
+          auth,
+          history,
+          from,
           url: routes.signUpPath(),
           username: values.username,
           password: values.password,
         });
-      } catch(e) {
+      } catch (e) {
         console.log(e);
         if (e.response && e.response.status === 409) {
-          setFieldError('username', t('signUpPage.user_already_exist'))
+          setFieldError('username', t('signUpPage.user_already_exist'));
         } else {
           setFieldError('username', t('signUpPage.registration_failed'));
         }
@@ -52,12 +55,12 @@ const SignUp = () => {
     },
   });
 
-  const { from } = location.state || { from: { pathname: "/" } };
+  const { from } = location.state || { from: { pathname: '/' } };
 
   return (
     <Container>
       <Row className="justify-content-center pt-5">
-          <h2>{t('Sign Up Form')}</h2>
+        <h2>{t('Sign Up Form')}</h2>
       </Row>
       <Row className="justify-content-center pt-5">
         <div className="col-sm-4">
@@ -71,7 +74,7 @@ const SignUp = () => {
                 value={formik.values.username}
                 isInvalid={formik.errors.username && formik.touched.username || false}
                 autoComplete="username"
-                required={true}
+                required
                 placeholder={t('username')}
               />
               <Form.Control.Feedback type="invalid">{formik.errors.username}</Form.Control.Feedback>
@@ -79,45 +82,45 @@ const SignUp = () => {
             <Form.Group>
               <Form.Label htmlFor="password">{t('password')}</Form.Label>
               <Form.Control
-                  id="password"
-                  name="password"
-                  onChange={formik.handleChange}
-                  value={formik.values.password}
-                  isInvalid={formik.errors.password && formik.touched.password || false}
-                  autoComplete="password"
-                  required={true}
-                  placeholder={t('password')}
-                  type="password"
-                />
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                isInvalid={formik.errors.password && formik.touched.password || false}
+                autoComplete="password"
+                required
+                placeholder={t('password')}
+                type="password"
+              />
               <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group>
               <Form.Label htmlFor="confirmPassword">{t('confirmPassword')}</Form.Label>
               <Form.Control
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  onChange={formik.handleChange}
-                  value={formik.values.confirmPassword}
-                  isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword || false}
-                  autoComplete="confirmPassword"
-                  required={true}
-                  placeholder={t('confirmPassword')}
-                  type="password"
-                />
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword || false}
+                autoComplete="confirmPassword"
+                required
+                placeholder={t('confirmPassword')}
+                type="password"
+              />
               <Form.Control.Feedback type="invalid">{formik.errors.confirmPassword}</Form.Control.Feedback>
             </Form.Group>
             <Button
               variant="primary"
               type="submit"
               disabled={formik.isSubmitting}
-              >{formik.isSubmitting ? t('Submitting…') : t('signUpPage.Submit')}
+            >
+              {formik.isSubmitting ? t('Submitting…') : t('signUpPage.Submit')}
             </Button>
           </Form>
         </div>
       </Row>
     </Container>
   );
-}
-
+};
 
 export default SignUp;

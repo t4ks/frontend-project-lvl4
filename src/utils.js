@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export const withTimeout = (onSuccess, onTimeout, timeout) => {
   let called = false;
 
@@ -15,12 +14,13 @@ export const withTimeout = (onSuccess, onTimeout, timeout) => {
     called = true;
     clearTimeout(timer);
     onSuccess.apply(this, args);
-  }
+  };
 };
 
-
-export const authorizeUser = async ({ url, username, password, auth, history, from }) => {
-  const response = await axios.post(url, { username: username, password: password });
+export const authorizeUser = async ({
+  url, username, password, auth, history, from,
+}) => {
+  const response = await axios.post(url, { username, password });
   localStorage.setItem('userId', response.data.token);
   localStorage.setItem('userName', response.data.username);
   auth.logIn();

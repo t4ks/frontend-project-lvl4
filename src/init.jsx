@@ -8,11 +8,9 @@ import '../assets/application.scss';
 import React from 'react';
 import { render } from 'react-dom';
 
-import App from './components/App.jsx'
-
-
+import App from './components/App.jsx';
 
 export default () => render(
-  <App/>,
+  <App />,
   document.getElementById('chat'),
 );

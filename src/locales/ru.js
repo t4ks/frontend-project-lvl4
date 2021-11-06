@@ -4,7 +4,7 @@ export default {
     chat: {
       input_message: 'Введите сообщение',
       invalid_status: 'Сервер вернул ошибку.',
-      network_error: 'Сетевая ошибка. Проверьте подключение к интернету.'
+      network_error: 'Сетевая ошибка. Проверьте подключение к интернету.',
     },
     loginPage: {
       invalid_pass_or_user: 'Неверные имя пользователя или пароль',
@@ -42,4 +42,4 @@ export default {
     Remove: 'Удалить',
     Rename: 'Переименовать',
   },
-}
+};

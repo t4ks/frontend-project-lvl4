@@ -2,15 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
 import { Modal, FormGroup, FormControl } from 'react-bootstrap';
-import { withTimeout } from '../../utils.js';
 import { useTranslation } from 'react-i18next';
-
+import { withTimeout } from '../../utils.js';
 
 const messageSendTimeout = 1000;
 
 const Rename = ({ onHide, socket, modalInfo }) => {
   const { t } = useTranslation();
-  const formik = useFormik({ 
+  const formik = useFormik({
     initialValues: { body: '' },
     onSubmit: (values, { setFieldError, setSubmitting }) => {
       socket.emit(
@@ -42,7 +41,7 @@ const Rename = ({ onHide, socket, modalInfo }) => {
   }, [null]);
 
   return (
-    <Modal show={true}>
+    <Modal show>
       <Modal.Header closeButton onHide={onHide}>
         <Modal.Title>{t('Rename Channel')}</Modal.Title>
       </Modal.Header>
@@ -56,8 +55,8 @@ const Rename = ({ onHide, socket, modalInfo }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid='rename-channel'
-              name='body'
+              data-testid="rename-channel"
+              name="body"
             />
           </FormGroup>
           <input type="submit" className="btn btn-primary" value={t('Submit')} />
@@ -71,6 +70,6 @@ Rename.propTypes = {
   onHide: PropTypes.func,
   socket: PropTypes.object,
   modalInfo: PropTypes.object,
-}
+};
 
 export default Rename;

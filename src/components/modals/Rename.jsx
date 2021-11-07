@@ -38,7 +38,7 @@ const Rename = ({ onHide, socket, modalInfo }) => {
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
-  }, [null]);
+  }, []);
 
   return (
     <Modal show>
@@ -67,9 +67,9 @@ const Rename = ({ onHide, socket, modalInfo }) => {
 };
 
 Rename.propTypes = {
-  onHide: PropTypes.func,
-  socket: PropTypes.object,
-  modalInfo: PropTypes.object,
+  onHide: PropTypes.shape.isRequired,
+  socket: PropTypes.shape.isRequired,
+  modalInfo: PropTypes.shape.isRequired,
 };
 
 export default Rename;

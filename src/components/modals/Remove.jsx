@@ -30,7 +30,7 @@ const Remove = ({ onHide, socket, modalInfo }) => {
           } else {
             return onHide();
           }
-          setSubmit(false);
+          return setSubmit(false);
         },
         () => {
           setSubmit(false);
@@ -63,9 +63,9 @@ const Remove = ({ onHide, socket, modalInfo }) => {
 };
 
 Remove.propTypes = {
-  onHide: PropTypes.func,
-  socket: PropTypes.object,
-  modalInfo: PropTypes.object,
+  onHide: PropTypes.func.isRequired,
+  socket: PropTypes.shape.isRequired,
+  modalInfo: PropTypes.shape.isRequired,
 };
 
 export default Remove;

@@ -39,7 +39,7 @@ const Add = ({ onHide, socket }) => {
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
-  }, [null]);
+  }, []);
 
   return (
     <Modal show>
@@ -68,8 +68,8 @@ const Add = ({ onHide, socket }) => {
 };
 
 Add.propTypes = {
-  onHide: PropTypes.func,
-  socket: PropTypes.object,
+  onHide: PropTypes.func.isRequired,
+  socket: PropTypes.shape.isRequired,
 };
 
 export default Add;

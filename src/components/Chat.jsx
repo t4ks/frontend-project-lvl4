@@ -1,5 +1,7 @@
 /* eslint-disable react/display-name */
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect, useRef, useState,
+} from 'react';
 import _ from 'lodash';
 import cn from 'classnames';
 import { useFormik } from 'formik';
@@ -113,30 +115,33 @@ const Chat = () => {
   const messageInputRef = useRef(null);
   const defaultChannelId = 1;
 
-  useEffect(async () => {
+  useEffect(() => {
     messageInputRef.current.focus();
-    try {
-      await dispatch(fetchChannels(auth.userId)).unwrap();
-    } catch (err) {
-      if ((err.statusCode) && (err.statusCode === 401)) {
-        auth.logOut();
-      } else {
+    const fetchChannelsData = async () => {
+      try {
+        await dispatch(fetchChannels(auth.userId)).unwrap();
+      } catch (err) {
+        const isAuthorizedErr = err.statusCode !== undefined ? err.statusCode === 401 : false;
+        if (isAuthorizedErr) {
+          auth.logOut();
+        }
         console.error(err);
       }
-    }
+    };
+    fetchChannelsData();
     socket.on('newMessage', (message) => {
       dispatch(addNewMessage(message));
     });
     socket.on('newChannel', (channel) => {
       dispatch(addNewChannel(channel));
-      setCurrentChannelId(channel.id);
+      dispatch(changeCurrentChannel(channel.id));
     });
     socket.on('renameChannel', (channel) => {
       dispatch(renameChannel(channel));
     });
     socket.on('removeChannel', (channel) => {
       dispatch(removeChannel(channel.id));
-      setCurrentChannelId(defaultChannelId);
+      dispatch(changeCurrentChannel(defaultChannelId));
     });
     return () => {
       socket.off('newMessage');
@@ -144,7 +149,7 @@ const Chat = () => {
       socket.off('renameChannel');
       socket.off('removeChannel');
     };
-  }, []);
+  }, [auth, dispatch, socket]);
 
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const hideModal = () => setModalInfo({ type: null, item: null });
@@ -165,7 +170,6 @@ const Chat = () => {
           (response) => {
             if (response.status !== 'ok') {
               setFieldError('message', t('chat.invalid_status'));
-              console.log(response);
             } else {
               resetForm(initialValues);
             }
@@ -213,7 +217,9 @@ const Chat = () => {
               </p>
             </div>
             <div id="messages-box" className="chat-messages overflow-auto px-5">
-              {messages.filter((message) => message.channelId === currentChannelId).map(renderMessage)}
+              {messages.filter(
+                (message) => message.channelId === currentChannelId,
+              ).map(renderMessage)}
             </div>
             <div className="mt-auto px-5 py-3">
               <Form className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>

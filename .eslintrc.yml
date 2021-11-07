@@ -38,7 +38,23 @@ settings:
 
 
 rules:
+  # no-console: 0
+  # import/extensions: [ error, always, { ignorePackages: true } ]
+  # functional/no-try-statement: [ error, { allowCatch: true, allowFinally: false } ]
+  # functional/functional-parameters: [ error, { enforceParameterCount: false } ]
+  # functional/no-expression-statement: [ off ]
+  # no-unused-expressions: [ error, { allowTernary: true } ]
+  import/extensions: 0
+  # TODO: cause an error
+  import/no-unresolved: 0
+  # react/jsx-filename-extension: 0
+  react/prop-types: 0
   no-console: 0
-  import/extensions: [ error, always, { ignorePackages: true } ]
-  functional/no-try-statement: [ error, { allowCatch: true, allowFinally: false } ]
-  functional/functional-parameters: [ error, { enforceParameterCount: false } ]
+  functional/no-conditional-statement: 0
+  functional/no-expression-statement: 0
+  functional/immutable-data: 0
+  functional/functional-parameters: 0
+  functional/no-try-statement: 0
+  functional/no-throw-statement: 0
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
+  testing-library/no-debug: 0

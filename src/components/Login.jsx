@@ -16,6 +16,8 @@ const LoginPage = () => {
   const auth = useAuth();
   const { t } = useTranslation();
 
+  const { from } = location.state || { from: { pathname: '/' } };
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -37,8 +39,6 @@ const LoginPage = () => {
       }
     },
   });
-
-  const { from } = location.state || { from: { pathname: '/' } };
 
   return (
     <Container>

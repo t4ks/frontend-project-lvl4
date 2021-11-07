@@ -26,6 +26,8 @@ const SignUp = () => {
     confirmPassword: yup.string().oneOf([yup.ref('password')], t('signUpPage.the_pass_field_is_not_the_same_with_confirm_field')).required(),
   });
 
+  const { from } = location.state || { from: { pathname: '/' } };
+
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -55,8 +57,6 @@ const SignUp = () => {
     },
   });
 
-  const { from } = location.state || { from: { pathname: '/' } };
-
   return (
     <Container>
       <Row className="justify-content-center pt-5">
@@ -72,7 +72,7 @@ const SignUp = () => {
                 name="username"
                 onChange={formik.handleChange}
                 value={formik.values.username}
-                isInvalid={formik.errors.username && formik.touched.username || false}
+                isInvalid={(formik.errors.username && formik.touched.username) || false}
                 autoComplete="username"
                 required
                 placeholder={t('username')}
@@ -86,7 +86,7 @@ const SignUp = () => {
                 name="password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
-                isInvalid={formik.errors.password && formik.touched.password || false}
+                isInvalid={(formik.errors.password && formik.touched.password) || false}
                 autoComplete="password"
                 required
                 placeholder={t('password')}
@@ -101,7 +101,9 @@ const SignUp = () => {
                 name="confirmPassword"
                 onChange={formik.handleChange}
                 value={formik.values.confirmPassword}
-                isInvalid={formik.errors.confirmPassword && formik.touched.confirmPassword || false}
+                isInvalid={
+                  (formik.errors.confirmPassword && formik.touched.confirmPassword) || false
+                }
                 autoComplete="confirmPassword"
                 required
                 placeholder={t('confirmPassword')}

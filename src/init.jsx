@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import App from './components/App.jsx';
 import store from './store';
 import { rollbarConfig } from './rollbar';
+/* eslint-disable-next-line no-unused-vars */
 import i18n from './i18n';
 
 export default () => render(

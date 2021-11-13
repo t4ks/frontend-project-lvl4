@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Provider } from 'react-redux';
 import { Navbar, Button, Container } from 'react-bootstrap';
-import { Provider as RollBarProvider, ErrorBoundary, LEVEL_WARN } from '@rollbar/react';
 import { io } from 'socket.io-client';
 import {
   BrowserRouter as Router,
@@ -10,17 +8,13 @@ import {
   Link,
   Redirect,
 } from 'react-router-dom';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Chat from './Chat.jsx';
 import LoginPage from './Login.jsx';
 import NotFound from './NotFound.jsx';
 import SignUp from './SignUp.jsx';
-import { authContext, socketContext } from '../contexts/index.jsx';
+import { authContext, socketContext } from '../contexts';
 import useAuth from '../hooks/index.jsx';
-
-import { rollbarConfig, rollbarInstance } from '../rollbar.js';
-import i18n from '../i18n.js';
-import store from '../store';
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
@@ -86,44 +80,36 @@ const PrivateRoute = ({ children, path }) => {
 };
 
 const App = () => (
-  <Provider store={store}>
-    <div className="d-flex flex-column h-100">
-      <RollBarProvider config={rollbarConfig} instance={rollbarInstance}>
-        <ErrorBoundary level={LEVEL_WARN}>
-          <I18nextProvider i18n={i18n}>
-            <AuthProvider>
-              <Router>
-                <Navbar bg="white" expand="lg" className="shadow-sm">
-                  <Container>
-                    <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
-                    <AuthButton />
-                  </Container>
-                </Navbar>
-                <Switch>
-                  <Route path="/login">
-                    <LoginPage />
-                  </Route>
-                  <Route path="/signup">
-                    <SignUp />
-                  </Route>
-                  <PrivateRoute exact path="/">
-                    <SocketProvider>
-                      <Container className="h-100 my-4 overflow-hidden rounded shadow">
-                        <Chat />
-                      </Container>
-                    </SocketProvider>
-                  </PrivateRoute>
-                  <Route path="*">
-                    <NotFound />
-                  </Route>
-                </Switch>
-              </Router>
-            </AuthProvider>
-          </I18nextProvider>
-        </ErrorBoundary>
-      </RollBarProvider>
-    </div>
-  </Provider>
+  <div className="d-flex flex-column h-100">
+    <AuthProvider>
+      <Router>
+        <Navbar bg="white" expand="lg" className="shadow-sm">
+          <Container>
+            <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
+            <AuthButton />
+          </Container>
+        </Navbar>
+        <Switch>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
+          </Route>
+          <PrivateRoute exact path="/">
+            <SocketProvider>
+              <Container className="h-100 my-4 overflow-hidden rounded shadow">
+                <Chat />
+              </Container>
+            </SocketProvider>
+          </PrivateRoute>
+          <Route path="*">
+            <NotFound />
+          </Route>
+        </Switch>
+      </Router>
+    </AuthProvider>
+  </div>
 );
 
 export default App;

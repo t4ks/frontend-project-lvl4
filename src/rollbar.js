@@ -1,6 +1,5 @@
-import Rollbar from 'rollbar';
-
 // same configuration you would create for the Rollbar.js SDK
+// eslint-disable-next-line import/prefer-default-export
 export const rollbarConfig = {
   accessToken: process.env.ROLLBAR_ACCESS_TOKEN,
   environment: process.env.NODE_ENV,
@@ -8,5 +7,3 @@ export const rollbarConfig = {
   captureUncaught: true,
   captureUnhandledRejections: true,
 };
-
-export const rollbarInstance = new Rollbar(rollbarConfig);

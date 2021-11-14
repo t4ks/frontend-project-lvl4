@@ -23,8 +23,6 @@ export const authorizeUser = async ({
   url, username, password, auth, history, from,
 }) => {
   const response = await axios.post(url, { username, password });
-  localStorage.setItem('userId', response.data.token);
-  localStorage.setItem('userName', response.data.username);
-  auth.logIn();
+  auth.logIn({ user: { userId: response.data.token, userName: response.data.username } });
   history.replace(from);
 };

@@ -17,21 +17,24 @@ import useAuth from '../hooks/index.jsx';
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
-  const userId = localStorage.getItem('userId');
-  const userName = localStorage.getItem('userName');
-  const initialState = userId !== null;
-  const [loggedIn, setLoggedIn] = useState(initialState);
-  const logIn = () => setLoggedIn(true);
+  const savedUserData = localStorage.getItem('userData');
+  const initialState = savedUserData !== undefined ? JSON.parse(savedUserData) : null;
+  const [userData, setLoggedIn] = useState(initialState);
+  const logIn = ({ user }) => {
+    localStorage.setItem('userData', JSON.stringify(user));
+    setLoggedIn(user);
+  };
   const logOut = () => {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    setLoggedIn(false);
+    localStorage.removeItem('userData');
+    setLoggedIn(null);
   };
 
   return (
-    <authContext.Provider value={{
-      loggedIn, logIn, logOut, userId, userName,
-    }}
+    <authContext.Provider value={
+      {
+        logIn, logOut, userData,
+      }
+    }
     >
       {children}
     </authContext.Provider>
@@ -49,7 +52,7 @@ const AuthButton = () => {
   const auth = useContext(authContext);
   const { t } = useTranslation();
   return (
-    auth.loggedIn
+    auth.userData !== null
       ? <Button onClick={auth.logOut}>{t('Log out')}</Button>
       : (
         <div>
@@ -64,11 +67,10 @@ const AuthButton = () => {
 // eslint-disable-next-line react/prop-types
 const PrivateRoute = ({ children, path }) => {
   const auth = useAuth();
-
   return (
     <Route
       path={path}
-      render={({ location }) => (auth.loggedIn
+      render={({ location }) => (auth.userData !== null
         ? children
         : <Redirect to={{ pathname: '/login', state: { from: location } }} />)}
     />

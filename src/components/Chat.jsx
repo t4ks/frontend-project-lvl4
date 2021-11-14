@@ -119,7 +119,7 @@ const Chat = () => {
     messageInputRef.current.focus();
     const fetchChannelsData = async () => {
       try {
-        await dispatch(fetchChannels(auth.userId)).unwrap();
+        await dispatch(fetchChannels(auth.userData.userId)).unwrap();
       } catch (err) {
         const isAuthorizedErr = err.statusCode !== undefined ? err.statusCode === 401 : false;
         if (isAuthorizedErr) {
@@ -165,7 +165,7 @@ const Chat = () => {
     onSubmit: (values, { setFieldError, setSubmitting, resetForm }) => {
       socket.emit(
         'newMessage',
-        { body: values.message, channelId: currentChannelId, username: auth.userName },
+        { body: values.message, channelId: currentChannelId, username: auth.userData.userName },
         withTimeout(
           (response) => {
             if (response.status !== 'ok') {

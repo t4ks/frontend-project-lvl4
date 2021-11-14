@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import { authContext } from '../contexts';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { authContext } from '../contexts';
 
 const AuthButton = () => {
   const auth = useContext(authContext);

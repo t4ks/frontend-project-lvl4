@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Navbar, Button, Container } from 'react-bootstrap';
-import { io } from 'socket.io-client';
 import {
   BrowserRouter as Router,
   Switch,
@@ -40,14 +39,11 @@ const AuthProvider = ({ children }) => {
 };
 
 // eslint-disable-next-line react/prop-types
-const SocketProvider = ({ children }) => {
-  const socket = io(process.env.API_URL);
-  return (
-    <socketContext.Provider value={socket}>
-      {children}
-    </socketContext.Provider>
-  );
-};
+const SocketProvider = ({ children, socket }) => (
+  <socketContext.Provider value={socket}>
+    {children}
+  </socketContext.Provider>
+);
 
 const AuthButton = () => {
   const auth = useContext(authContext);
@@ -79,7 +75,7 @@ const PrivateRoute = ({ children, path }) => {
   );
 };
 
-const App = () => (
+const App = ({ socket }) => (
   <div className="d-flex flex-column h-100">
     <AuthProvider>
       <Router>
@@ -97,7 +93,7 @@ const App = () => (
             <SignUp />
           </Route>
           <PrivateRoute exact path="/">
-            <SocketProvider>
+            <SocketProvider socket={socket}>
               <Container className="h-100 my-4 overflow-hidden rounded shadow">
                 <Chat />
               </Container>

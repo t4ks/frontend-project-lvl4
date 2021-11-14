@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
-import useAuth from '../hooks/index';
+import { useAuth } from '../hooks';
 import routes from '../routes';
 import { authorizeUser } from '../utils';
 

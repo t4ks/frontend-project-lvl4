@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import {
   fetchChannels, addNewMessage, changeCurrentChannel, addNewChannel, renameChannel, removeChannel,
 } from '../slices/chatSlice.js';
-import useAuth, { useSocket } from '../hooks/index.jsx';
+import { useAuth, useSocket } from '../hooks';
 import getModal from './modals/index.jsx';
 import { withTimeout } from '../utils.js';
 
